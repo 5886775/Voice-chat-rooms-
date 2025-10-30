@@ -1,24 +1,18 @@
 workflows:
-  android-workflow:
-    name: Build Android App
+  android-native-build:
+    name: Native Android Build
     environment:
-      flutter: stable
       java: 17
-      vars:
-        # يمكنك تعريف متغيرات البيئة هنا
-        MY_API_KEY: "your-api-key"
     scripts:
-      - name: Install dependencies
+      - name: Extract source code
         script: |
-          flutter pub get
-      - name: Run tests
+          unzip -o voice_chat_app_source.zip -d .
+      - name: Build Android APK
         script: |
-          flutter test
-      - name: Build APK
-        script: |
-          flutter build apk --release
+          cd voice_chat_app_source
+          ./gradlew assembleRelease
     artifacts:
-      - build/app/outputs/flutter-apk/app-release.apk
+      - voice_chat_app_source/app/build/outputs/apk/release/app-release.apk
     publishing:
       email:
         recipients:
