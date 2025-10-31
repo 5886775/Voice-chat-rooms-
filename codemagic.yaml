@@ -7,12 +7,15 @@ workflows:
       - name: Extract source code
         script: |
           unzip -o voice_chat_app_source.zip -d .
+          export PROJECT_DIR=$(find . -type f -name "gradlew" | head -n 1 | xargs dirname)
+          echo "Project directory: $PROJECT_DIR"
       - name: Build Android APK
         script: |
-          cd voice_chat_app_source
+          cd $PROJECT_DIR
+          chmod +x gradlew
           ./gradlew assembleRelease
     artifacts:
-      - voice_chat_app_source/app/build/outputs/apk/release/app-release.apk
+      - $PROJECT_DIR/app/build/outputs/apk/release/app-release.apk
     publishing:
       email:
         recipients:
